@@ -1,0 +1,18 @@
+[build]
+target = "aarch64-unknown-linux-gnu"
+
+# 使用我们的 kernel script 来进行链接
+[target.aarch64-unknown-linux-gnu]
+rustflags = [
+    "-C", "link-arg=-Tsrc/link.ld",
+]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+
+
+[term]
+verbose = true
