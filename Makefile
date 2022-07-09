@@ -22,4 +22,4 @@ build:
 
 clean:
 	@cargo clean
-	rm kernel7.*
+	rm kernel8.*
