@@ -31,3 +31,15 @@ pub const AUX_MU_BAUD_REG: usize = AUX_IRQ + 0x68;
 
 pub const AUX_UART_CLOCK: usize = 500000000;
 pub const UART_MAX_QUEUE: usize  = 16 * 1024;
+
+// GPIO
+
+pub const GPFSEL0: usize = PERIPHERAL_BASE + 0x200000;
+pub const GPSET0: usize  = PERIPHERAL_BASE + 0x20001C;
+pub const GPCLR0: usize  = PERIPHERAL_BASE + 0x200028;
+pub const GPPUPPDN0: usize =  PERIPHERAL_BASE + 0x2000E4;
+
+pub const GPIO_MAX_PIN: usize = 53;
+pub const GPIO_FUNCTION_ALT5: usize = 2;
+
+pub const PULL_NONE: usize = 0;

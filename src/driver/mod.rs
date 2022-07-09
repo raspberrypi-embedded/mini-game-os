@@ -1,6 +1,7 @@
 use core::ptr::{read, write};
 
 pub mod uart;
+pub mod gpio;
 
 /// Read something from mmio address
 pub fn mmio_read(addr: u32) -> u32 {
