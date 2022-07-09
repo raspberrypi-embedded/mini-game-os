@@ -3,6 +3,13 @@
 
 use core::{panic::PanicInfo, arch::global_asm};
 
+#[cfg(feature = "board_raspi4")]
+#[path = "boards/raspi4.rs"]
+mod board;
+#[cfg(not(any(feature = "board_raspi4")))]
+#[path = "boards/qemu.rs"]
+mod board;
+
 global_asm!(include_str!("boot/boot.S"));
 
 /// This function is called on panic.

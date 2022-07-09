@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "rpi4-games"
+name = "raspi4-game"
 version = "0.1.0"

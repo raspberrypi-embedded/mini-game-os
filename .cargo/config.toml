@@ -4,7 +4,7 @@ target = "aarch64-unknown-none"
 
 [target.aarch64-unknown-none]
 rustflags = [
-    "-C", "link-arg=-Tsrc/link.ld",
+    "-C", "link-arg=-Tsrc/linker.ld",
 ]
 
 [term]
