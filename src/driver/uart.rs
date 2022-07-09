@@ -24,20 +24,19 @@ pub fn uart_init() {
 }
 
 fn uart_write_byte_ready() -> u32 {
-    return mmio_read(board::AUX_MU_LSR_REG as u32) & 0x20
+    return mmio_read(board::AUX_MU_LSR_REG) & 0x20
 }
 
 fn uart_write_char(c: char) {
     loop {
-        if uart_write_byte_ready() != 0{
-            break
-        }
+        if uart_write_byte_ready() != 0{ break }
     }
     mmio_write(board::AUX_MU_IO_REG, c as u32);
 }
 
 pub fn uart_write_text(buf: &str) {
     for c in buf.chars() {
-        uart_write_char(c);
+        if c == '\n' { uart_write_char('\r') }
+        uart_write_char(c)
     }
 }

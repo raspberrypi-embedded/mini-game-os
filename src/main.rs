@@ -15,7 +15,7 @@ use driver::uart;
 
 global_asm!(include_str!("boot/boot.S"));
 
-pub const LOGO: &str = include_str!("logo.txt");
+pub const LOGO: &'static str = include_str!("logo.txt");
 
 /// This function is called on panic.
 #[panic_handler]
@@ -27,7 +27,6 @@ fn panic(_info: &PanicInfo) -> ! {
 extern "C" fn rust_main() {
     uart::uart_init();
     uart::uart_write_text(LOGO);
-    uart::uart_write_text("\n");
     uart::uart_write_text("uart init......\n");
     loop{}
 }

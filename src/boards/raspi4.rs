@@ -40,6 +40,11 @@ pub const GPCLR0: usize  = PERIPHERAL_BASE + 0x200028;
 pub const GPPUPPDN0: usize =  PERIPHERAL_BASE + 0x2000E4;
 
 pub const GPIO_MAX_PIN: usize = 53;
+
+pub const GPIO_FUNCTION_OUT: usize = 1;
 pub const GPIO_FUNCTION_ALT5: usize = 2;
+pub const GPIO_FUNCTION_ALT3: usize = 7;
 
 pub const PULL_NONE: usize = 0;
+pub const PULL_DOWN: usize = 1;
+pub const PULL_UP: usize = 2;
