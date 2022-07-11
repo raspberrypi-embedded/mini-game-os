@@ -1,7 +1,30 @@
 use bcm2711::{ addr, gpio, mmio_write };
+use spin::Mutex;
 
 pub const AUX_UART_CLOCK: usize = 500000000;
 pub const UART_MAX_QUEUE: usize  = 16 * 1024;
+
+/// Uart Output Queue which wrapped by mutex
+pub static mut UART_OUTPUT_QUEUE: Mutex<UartOutputQueue> = Mutex::new(
+    UartOutputQueue{
+        read: 0,
+        write: 1,
+        queue: [0u8; UART_MAX_QUEUE]
+    }
+);
+
+pub struct UartOutputQueue {
+    read: usize,
+    write: usize,
+    queue: [u8; UART_MAX_QUEUE]
+}
+
+impl UartOutputQueue {
+    /// Check if queue is empty
+    pub fn is_queue_empty(&self) -> bool {
+        return self.read == self.write
+    }
+}
 
 fn aux_mu_baud(baud: usize) -> u32 {
     return ((AUX_UART_CLOCK / (baud * 8)) - 1) as u32
