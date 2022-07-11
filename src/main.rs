@@ -11,9 +11,6 @@ mod board;
 #[path = "boards/raspi4/mod.rs"]
 mod board;
 
-// mod driver;
-
-// use driver::uart;
 
 global_asm!(include_str!("boot/boot.S"));
 
