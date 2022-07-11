@@ -1,0 +1,3 @@
+[submodule "bcm2711"]
+	path = bcm2711
+	url = git@github.com:KuangjuX/bcm2711.git
