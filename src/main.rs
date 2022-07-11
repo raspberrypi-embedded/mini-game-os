@@ -2,16 +2,18 @@
 #![no_main]
 
 use core::{panic::PanicInfo, arch::global_asm};
+use bcm2711::mini_uart::uart_write_text;
 
-#[cfg(feature = "board_raspi4")]
-#[path = "boards/raspi4.rs"]
+#[cfg(feature = "board_qemu")]
+#[path = "boards/qemu"]
 mod board;
-#[cfg(not(any(feature = "board_raspi4")))]
-#[path = "boards/qemu.rs"]
+#[cfg(not(any(feature = "board_qemu")))]
+#[path = "boards/raspi4/mod.rs"]
 mod board;
-mod driver;
 
-use driver::uart;
+// mod driver;
+
+// use driver::uart;
 
 global_asm!(include_str!("boot/boot.S"));
 
@@ -25,8 +27,8 @@ fn panic(_info: &PanicInfo) -> ! {
 
 #[no_mangle]
 extern "C" fn rust_main() {
-    uart::uart_init();
-    uart::uart_write_text(LOGO);
-    uart::uart_write_text("uart init......\n");
+    board::driver::uart_init();
+    uart_write_text(LOGO);
+    uart_write_text("uart init......\n");
     loop{}
 }

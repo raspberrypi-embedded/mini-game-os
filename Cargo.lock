@@ -3,5 +3,21 @@
 version = 3
 
 [[package]]
+name = "bcm2711"
+version = "0.1.0"
+dependencies = [
+ "volatile",
+]
+
+[[package]]
 name = "raspi4-game"
 version = "0.1.0"
+dependencies = [
+ "bcm2711",
+]
+
+[[package]]
+name = "volatile"
+version = "0.4.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e3ca98349dda8a60ae74e04fd90c7fb4d6a4fbe01e6d3be095478aa0b76f6c0c"
