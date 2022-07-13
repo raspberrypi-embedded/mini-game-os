@@ -1,8 +1,9 @@
-TARGRT := aarch64-unknown-none
-MODE   := debug
-ELF	   := target/$(TARGRT)/$(MODE)/raspi4-game
-SDCARD := /dev/sdb1
-KERNEL_IMG := kernel8.img
+TARGRT 		:= aarch64-unknown-none
+MODE   		:= debug
+ELF	   		:= target/$(TARGRT)/$(MODE)/raspi4-game
+SDCARD 		:= /media/kuangjux/boot
+KERNEL_IMG 	:= kernel8.img
+CONFIG_FILE	:= config.txt
 
 BOARD ?= raspi4
 
@@ -22,6 +23,8 @@ build: kernel sdcard
 sdcard: 
 	@echo "Are you sure write to $(SDCARD) ? [y/N] " && read ans && [ $${ans:-N} = y ]
 	@sudo cp $(KERNEL_IMG) $(SDCARD)
+	@sudo cp $(CONFIG_FILE) $(SDCARD)
+	
 
 kernel:
 	@echo Platform: $(BOARD)

@@ -3,13 +3,15 @@ use core::fmt;
 
 pub fn _print(args: fmt::Arguments) {
     use fmt::Write;
-    let mut uart = unsafe{ UART.lock() };
-    uart.write_fmt(args).unwrap();
+    // let mut uart = unsafe{ UART };
+    // uart.write_fmt(args).unwrap();
+    unsafe{ UART.write_fmt(args).unwrap()}
 }
 
 pub fn console_ptr(c: u8) {
-    let mut uart = unsafe{ UART.lock() };
-    uart.write_byte(c as char)
+    // let mut uart = unsafe{ UART.lock() };
+    // uart.write_byte(c as char)
+    unsafe{ UART.write_byte(c as char) }
 }
 
 /// implement print and println! macro

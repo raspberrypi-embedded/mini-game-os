@@ -6,13 +6,11 @@ pub const AUX_UART_CLOCK: usize = 500000000;
 pub const UART_MAX_QUEUE: usize  = 16 * 1024;
 
 /// Uart Output Queue which wrapped by mutex
-pub static mut UART: Mutex<Uart> = Mutex::new(
-    Uart{
-        read_index: 0,
-        write_index: 1,
-        queue: [0u8; UART_MAX_QUEUE]
-    }
-);
+pub static mut UART: Uart = Uart{
+    read_index: 0,
+    write_index: 0,
+    queue: [0u8; UART_MAX_QUEUE]
+};
 
 pub struct Uart {
     read_index: usize,
@@ -67,9 +65,9 @@ impl Uart {
     }
 
     /// Write a serials of chars into mini uart
-    // pub fn write(&self, buf: &str) {
-    //     mini_uart::uart_write_text(buf);
-    // }
+    pub fn write(&self, buf: &str) {
+        mini_uart::uart_write_text(buf);
+    }
 
 
     fn update_fifo(&mut self) {
@@ -101,18 +99,15 @@ impl Uart {
 }
 
 pub fn uart_init() {
-    let uart = unsafe{ UART.lock() };
-    uart.init();
+    unsafe{ UART.init() };
 }
 
-// pub fn uart_write_text(buf: &str) {
-//     let uart = unsafe{ UART.lock() };
-//     uart.write(buf);
-// }
+pub fn uart_write_text(buf: &str) {
+    unsafe{ UART.write(buf) }
+}
 
 pub fn uart_wait_read() {
-    let mut uart = unsafe{ UART.lock() };
-    uart.non_block_wait_read();
+    unsafe{ UART.non_block_wait_read() }
 }
 
 impl Write for Uart {
