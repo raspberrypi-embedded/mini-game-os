@@ -14,7 +14,7 @@ dependencies = [
 name = "bcm2711"
 version = "0.1.0"
 dependencies = [
- "volatile",
+ "bit_field",
 ]
 
 [[package]]
@@ -37,9 +37,3 @@ name = "spin"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
-
-[[package]]
-name = "volatile"
-version = "0.4.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3ca98349dda8a60ae74e04fd90c7fb4d6a4fbe01e6d3be095478aa0b76f6c0c"
