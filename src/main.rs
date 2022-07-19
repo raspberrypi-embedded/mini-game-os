@@ -2,6 +2,7 @@
 #![no_main]
 
 use core::{panic::PanicInfo, arch::global_asm};
+use bcm2711::mailboxes::MailBox;
 
 #[cfg(feature = "board_qemu")]
 #[path = "boards/qemu"]
@@ -27,11 +28,13 @@ fn panic(_info: &PanicInfo) -> ! {
 #[no_mangle]
 extern "C" fn rust_main() {
     board::driver::uart_init();
-    // board::driver::uart_write_text(LOGO);
-    // board::driver::uart_write_text("uart init......\n");
+
     println!("{}", LOGO);
     println!("Uart init......\n");
-    loop{
-        board::driver::uart_wait_read();
-    }
+    // loop{
+    //     board::driver::uart_wait_read();
+    // }
+    let mut mail_box = MailBox::new();
+    let mut frame_buffer = board::driver::FrameBuffer::new(32, 32, &mut mail_box);
+    frame_buffer.init();
 }

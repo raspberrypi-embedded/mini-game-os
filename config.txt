@@ -83,3 +83,16 @@ otg_mode=1
 arm_boost=1
 
 [all]
+
+# uncomment to force a console size. By default it will be display's size minus
+# overscan.
+framebuffer_width=1024
+framebuffer_height=600
+
+hdmi_force_hotplug=1
+#hdmi_ignore_edid=0xa5000080
+hdmi_cvt=1024 600 60 3 0 0 0
+
+# uncomment to force a specific HDMI mode (this will force VGA)
+hdmi_group=2
+hdmi_mode=87

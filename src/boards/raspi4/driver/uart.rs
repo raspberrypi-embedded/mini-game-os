@@ -1,5 +1,4 @@
 use bcm2711::{ addr, gpio, mmio_write, mini_uart };
-use spin::Mutex;
 use core::fmt::{ Write, Error };
 
 pub const AUX_UART_CLOCK: usize = 500000000;

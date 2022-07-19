@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 spin = "0.5"
+lazy_static = { version = "1.4.0", features = ["spin_no_std"] }
 allocator = { git = "https://github.com/Ko-oK-OS/allocator.git" }
 
 
