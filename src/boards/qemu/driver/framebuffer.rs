@@ -19,7 +19,9 @@ impl<'a> FrameBuffer<'a> {
         }
     }
 
+
     /// (ref: https://github.com/isometimes/rpi4-osdev/blob/master/part5-framebuffer/fb.c)
+    #[no_mangle]
     pub fn init(&mut self) {
         // Length of message in bytes
         self.mail_box.write_buf(0, 35 * 4);
