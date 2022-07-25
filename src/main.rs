@@ -2,9 +2,8 @@
 #![no_main]
 
 use core::{panic::PanicInfo, arch::global_asm};
-use bcm2837::mailboxes::MailBox;
 
-use crate::board::driver::FrameBuffer;
+use crate::{board::driver::FrameBuffer, graphics::Graphics};
 
 #[cfg(feature = "board_qemu")]
 #[path = "boards/qemu/mod.rs"]
@@ -16,6 +15,7 @@ mod board;
 #[macro_use]
 mod mm;
 mod printf;
+mod graphics;
 
 global_asm!(include_str!("boot/boot.S"));
 
@@ -34,10 +34,27 @@ extern "C" fn rust_main() {
     println!("{}", LOGO);
     println!("Uart init......");
     #[cfg(feature = "board_qemu")]
-    {
+    {   
+        use bcm2837::mailboxes::MailBox;
         println!("Frame Buffer init......");
         let mut mailbox = MailBox::new();
         let mut frame_buffer = FrameBuffer::new(1024, 768, &mut mailbox);
-        frame_buffer.init();
-    }
+        if let Ok((addr, pitch)) = frame_buffer.init() {
+            let graphics = graphics::Graphics::new(addr, pitch);
+            graphics.draw_pixel(100, 100, 1);
+        }
+        
+    }   
+
+    #[cfg(feature = "board_raspi4")]
+    {   
+        use bcm2711::mailboxes::MailBox;
+        println!("Frame Buffer init......");
+        let mut mailbox = MailBox::new();
+        let mut frame_buffer = FrameBuffer::new(1024, 768, &mut mailbox);
+        if let Ok((addr, pitch)) = frame_buffer.init() {
+            let graphics = graphics::Graphics::new(addr, pitch);
+            graphics.draw_pixel(100, 100, 1);
+        }    
+    }   
 }

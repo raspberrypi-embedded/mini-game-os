@@ -22,7 +22,7 @@ impl<'a> FrameBuffer<'a> {
 
     /// (ref: https://github.com/isometimes/rpi4-osdev/blob/master/part5-framebuffer/fb.c)
     #[no_mangle]
-    pub fn init(&mut self) {
+    pub fn init(&mut self) -> Result<(*mut u32, u32), ()> {
         // Length of message in bytes
         self.mail_box.write_buf(0, 35 * 4);
         self.mail_box.write_buf(1, MAILBOX_REQUEST);
@@ -81,8 +81,10 @@ impl<'a> FrameBuffer<'a> {
             let pitch = self.mail_box.read_buf(33);
             let isrgb = self.mail_box.read_buf(24);
             println!("[Debug] width: {}, height: {}, pitch: {}, isgrb: {}", width, height, pitch, isrgb);
+            return Ok((self.mail_box.addr() as *mut u32, pitch));
         }else{
-            println!("[Debug] mailbox[20]: {}, mailbox[32]: {}", self.mail_box.read_buf(20), self.mail_box.read_buf(32));
+            // println!("[Debug] mailbox[20]: {}, mailbox[32]: {}", self.mail_box.read_buf(20), self.mail_box.read_buf(32));
+            return Err(());
         }
     }
 }

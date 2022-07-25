@@ -10,7 +10,8 @@ CONFIG_FILE	:= config.txt
 GDB			:= gdb-multiarch
 
 QEMU 	     := qemu-system-aarch64 
-QEMUOPTS     := -M raspi3 -kernel kernel8.img -serial null -serial stdio
+QEMUOPTS     := -M raspi3b -kernel kernel8.img -serial null -serial stdio
+QEMUOPTS     += -display sdl
 
 BOARD ?= qemu
 
