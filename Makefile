@@ -2,13 +2,17 @@ TARGRT 		:= aarch64-unknown-none
 MODE   		:= debug
 ELF	   		:= target/$(TARGRT)/$(MODE)/raspi4-game
 SDCARD 		:= /media/kuangjux/boot
+KERNEL_FILE := kernel8.elf
 KERNEL_IMG 	:= kernel8.img
+KERNEL_ASM	:= kernel8.S
 CONFIG_FILE	:= config.txt
 
-QEMU 	     := qemu-system-aarch64 
-QEMU_OPTIONS := -M raspi3 -kernel kernel8.img -serial null -serial stdio
+GDB			:= gdb-multiarch
 
-BOARD ?= raspi4
+QEMU 	     := qemu-system-aarch64 
+QEMUOPTS     := -M raspi3 -kernel kernel8.img -serial null -serial stdio
+
+BOARD ?= qemu
 
 # Building mode argument
 ifeq ($(MODE), release)
@@ -37,8 +41,27 @@ kernel:
 	@$(OBJCOPY) -O binary kernel8.elf kernel8.img
 
 qemu: kernel
-	$(QEMU) $(QEMU_OPTIONS)
+	$(QEMU) $(QEMUOPTS)
 
 clean:
 	@cargo clean
 	@rm kernel8.*
+
+gdb:
+	gdb-multiarch -n -x .gdbinit
+
+qemu-gdb: kernel
+	@echo "***"
+	@echo "*** make qemu-gdb'." 1>&2
+	@echo "***"
+	$(QEMU) -nographic $(QEMUOPTS) -S 
+
+debug: kernel
+	@tmux new-session -d \
+		"$(QEMU) $(QEMUOPTS) -s -S" && \
+		tmux split-window -h "$(GDB) -ex 'file $(KERNEL_FILE)' -ex 'set arch auto' -ex 'target remote localhost:1234'" && \
+		tmux -2 attach-session -d
+
+# 查看反汇编结果
+asm: kernel
+	@$(OBJDUMP) -d $(KERNEL_FILE) > $(KERNEL_ASM)
