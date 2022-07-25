@@ -2,9 +2,12 @@ use core::ptr;
 use core::convert::TryInto;
 use embedded_graphics::geometry::{ OriginDimensions, Size };
 use embedded_graphics::draw_target::DrawTarget;
-use embedded_graphics::pixelcolor::{ Gray8, GrayColor, Rgb565, raw::RawU16 };
+use embedded_graphics::pixelcolor::{ Rgb888, Rgb565, raw::RawU16, raw::RawU32, raw::RawU24 };
 use embedded_graphics::prelude::*;
 use embedded_graphics::primitives::*;
+use embedded_graphics::mono_font::ascii::*;
+use embedded_graphics::mono_font::MonoTextStyle;
+use embedded_graphics::text::Text;
 
 
 const VGA: [u32; 16] = [
@@ -42,14 +45,14 @@ impl Graphics {
         }
     }   
 
-    pub fn draw_pixel(&self, x: u32, y: u32, color: u16) {
+    pub fn draw_pixel(&self, x: u32, y: u32, color: u32) {
         // let offset = y * self.pitch + x * 4;
         let offset = y * self.pitch / 4 + x;
         unsafe{
             ptr::write(
                 self.framebuffer.add(offset as usize), 
                 // VGA[(attr & 0xf) as usize]
-                color as u32
+                color
             );
         }
     }
@@ -57,8 +60,13 @@ impl Graphics {
     pub fn draw_line(&mut self, x1: i32, y1: i32, x2: i32, y2: i32) {
         // Red 1 pixel wide line from (50, 20) to (60, 35)
         Line::new(Point::new(x1, y1), Point::new(x2, y2))
-        .into_styled(PrimitiveStyle::with_stroke(Rgb565::RED, 1))
+        .into_styled(PrimitiveStyle::with_stroke(Rgb888::WHITE, 1))
         .draw(self).unwrap();
+    }
+
+    pub fn draw_text(&mut self, text: &str, x: u32, y: u32) {
+        let style = MonoTextStyle::new(&FONT_10X20, Rgb888::WHITE);
+        Text::new(text, Point::new(x as i32, y as i32), style).draw(self).unwrap();
     }
 }
 
@@ -69,7 +77,7 @@ impl OriginDimensions for Graphics {
 }
 
 impl DrawTarget for Graphics {
-    type Color = Rgb565;
+    type Color = Rgb888;
 
     type Error = core::convert::Infallible;
 
@@ -85,7 +93,7 @@ impl DrawTarget for Graphics {
             if let Ok((x, y)) = coord.try_into() {
                 assert!(x <= self.width);
                 assert!(y <= self.height);
-                self.draw_pixel(x, y, RawU16::from(color).into_inner())
+                self.draw_pixel(x, y, RawU24::from(color).into_inner())
             }
         }
 

@@ -1,9 +1,10 @@
 #![no_std]
 #![no_main]
+#![feature(alloc_error_handler)]
 
 use core::{panic::PanicInfo, arch::global_asm};
 
-use crate::{board::driver::FrameBuffer, graphics::Graphics};
+extern crate alloc;
 
 #[cfg(feature = "board_qemu")]
 #[path = "boards/qemu/mod.rs"]
@@ -33,9 +34,11 @@ extern "C" fn rust_main() {
 
     println!("{}", LOGO);
     println!("Uart init......");
+    mm::KERNEL_HEAP.mm_init();
     #[cfg(feature = "board_qemu")]
     {   
         use bcm2837::mailboxes::MailBox;
+        use board::driver::FrameBuffer;
         println!("Frame Buffer init......");
         let mut mailbox = MailBox::new();
         let mut frame_buffer = FrameBuffer::new(1024, 768, &mut mailbox);
@@ -46,7 +49,8 @@ extern "C" fn rust_main() {
             //     println!("[Debug] draw pixel ({}, {})", i, 100);
             //     graphics.draw_pixel(i, 100, 0x0C);
             // }
-            graphics.draw_line(50, 50, 500, 500);
+            // graphics.draw_line(50, 50, 500, 500);
+            graphics.draw_text("Hello World!", 100, 50);
         }
         
     }   
