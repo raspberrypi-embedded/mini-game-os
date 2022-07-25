@@ -36,6 +36,15 @@ pub struct Graphics {
 }
 
 impl Graphics {
+    pub fn uninit() -> Self {
+        Self {
+            width: 0,
+            height: 0,
+            framebuffer: ptr::null_mut(),
+            pitch: 0
+        }
+    }
+
     pub fn new(addr: *mut u32, pitch: u32, width: u32, height: u32) -> Self {
         Self {
             width,
@@ -45,7 +54,7 @@ impl Graphics {
         }
     }   
 
-    pub fn draw_pixel(&self, x: u32, y: u32, color: u32) {
+    pub fn set_pixel(&self, x: u32, y: u32, color: u32) {
         // let offset = y * self.pitch + x * 4;
         let offset = y * self.pitch / 4 + x;
         unsafe{
@@ -57,12 +66,14 @@ impl Graphics {
         }
     }
 
+
     pub fn draw_line(&mut self, x1: i32, y1: i32, x2: i32, y2: i32) {
         // Red 1 pixel wide line from (50, 20) to (60, 35)
         Line::new(Point::new(x1, y1), Point::new(x2, y2))
         .into_styled(PrimitiveStyle::with_stroke(Rgb888::WHITE, 1))
         .draw(self).unwrap();
     }
+
 
     pub fn draw_text(&mut self, text: &str, x: u32, y: u32) {
         let style = MonoTextStyle::new(&FONT_10X20, Rgb888::WHITE);
@@ -93,7 +104,7 @@ impl DrawTarget for Graphics {
             if let Ok((x, y)) = coord.try_into() {
                 assert!(x <= self.width);
                 assert!(y <= self.height);
-                self.draw_pixel(x, y, RawU24::from(color).into_inner())
+                self.set_pixel(x, y, RawU24::from(color).into_inner())
             }
         }
 

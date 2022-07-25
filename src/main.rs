@@ -4,6 +4,8 @@
 
 use core::{panic::PanicInfo, arch::global_asm};
 
+use crate::{snake::Snake, graphics::Graphics};
+
 extern crate alloc;
 
 #[cfg(feature = "board_qemu")]
@@ -17,6 +19,7 @@ mod board;
 mod mm;
 mod printf;
 mod graphics;
+mod snake;
 
 global_asm!(include_str!("boot/boot.S"));
 
@@ -35,22 +38,20 @@ extern "C" fn rust_main() {
     println!("{}", LOGO);
     println!("Uart init......");
     mm::KERNEL_HEAP.mm_init();
+
+    let mut graphics: Graphics = Graphics::uninit();
+    let mut snake: snake::Snake;
     #[cfg(feature = "board_qemu")]
     {   
         use bcm2837::mailboxes::MailBox;
         use board::driver::FrameBuffer;
         println!("Frame Buffer init......");
         let mut mailbox = MailBox::new();
-        let mut frame_buffer = FrameBuffer::new(1024, 768, &mut mailbox);
+        let mut frame_buffer = FrameBuffer::new(1920, 1024, &mut mailbox);
         if let Ok((addr, pitch)) = frame_buffer.init() {
-            let mut graphics = graphics::Graphics::new(addr, pitch, 1024, 768);
-            // graphics.draw_pixel(100, 100, 1);
-            // for i in 100..200 {
-            //     println!("[Debug] draw pixel ({}, {})", i, 100);
-            //     graphics.draw_pixel(i, 100, 0x0C);
-            // }
-            // graphics.draw_line(50, 50, 500, 500);
-            graphics.draw_text("Hello World!", 100, 50);
+            graphics = graphics::Graphics::new(addr, pitch, 1024, 768);
+
+            // graphics.draw_text("Hello World!", 100, 50);
         }
         
     }   
@@ -62,8 +63,12 @@ extern "C" fn rust_main() {
         let mut mailbox = MailBox::new();
         let mut frame_buffer = FrameBuffer::new(1024, 768, &mut mailbox);
         if let Ok((addr, pitch)) = frame_buffer.init() {
-            let graphics = graphics::Graphics::new(addr, pitch);
+            graphics = graphics::Graphics::new(addr, pitch);
             graphics.draw_pixel(100, 100, 1);
         }    
     }   
+
+    snake = Snake::new(5, &mut graphics);
+    snake.init();
+    snake.display();
 }
