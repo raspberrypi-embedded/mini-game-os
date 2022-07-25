@@ -11,7 +11,7 @@ GDB			:= gdb-multiarch
 
 QEMU 	     := qemu-system-aarch64 
 QEMUOPTS     := -M raspi3b -kernel kernel8.img -serial null -serial stdio
-QEMUOPTS     += -display sdl
+QEMUOPTS     += -display sdl 
 
 BOARD ?= qemu
 

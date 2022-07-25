@@ -75,13 +75,16 @@ impl<'a> FrameBuffer<'a> {
         self.mail_box.write_buf(34, MailboxTag::TagLast as u32);
 
         if self.mail_box.call(MailboxChannel::Property).is_ok() && self.mail_box.read_buf(20) == 32 && self.mail_box.read_buf(28) != 0 {
-            self.mail_box.write_buf(28, 0x3FFFFFFF);
+            let val = self.mail_box.read_buf(28) & 0x3FFFFFFF;
+            // Convert GPU address to ARM address
+            self.mail_box.write_buf(28, val);
             let width = self.mail_box.read_buf(5);
             let height = self.mail_box.read_buf(6);
             let pitch = self.mail_box.read_buf(33);
             let isrgb = self.mail_box.read_buf(24);
             println!("[Debug] width: {}, height: {}, pitch: {}, isgrb: {}", width, height, pitch, isrgb);
-            return Ok((self.mail_box.addr() as *mut u32, pitch));
+            let fb_addr = self.mail_box.read_buf(28) as *mut u32;
+            return Ok((fb_addr, pitch));
         }else{
             // println!("[Debug] mailbox[20]: {}, mailbox[32]: {}", self.mail_box.read_buf(20), self.mail_box.read_buf(32));
             return Err(());

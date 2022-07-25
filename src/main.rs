@@ -41,7 +41,11 @@ extern "C" fn rust_main() {
         let mut frame_buffer = FrameBuffer::new(1024, 768, &mut mailbox);
         if let Ok((addr, pitch)) = frame_buffer.init() {
             let graphics = graphics::Graphics::new(addr, pitch);
-            graphics.draw_pixel(100, 100, 1);
+            // graphics.draw_pixel(100, 100, 1);
+            for i in 100..200 {
+                println!("[Debug] draw pixel ({}, {})", i, 100);
+                graphics.draw_pixel(i, 100, 0x0C);
+            }
         }
         
     }   
