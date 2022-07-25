@@ -18,6 +18,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "bcm2837"
+version = "0.1.0"
+dependencies = [
+ "bit_field",
+]
+
+[[package]]
 name = "bit_field"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -38,6 +45,7 @@ version = "0.1.0"
 dependencies = [
  "allocator",
  "bcm2711",
+ "bcm2837",
  "lazy_static",
  "spin",
 ]

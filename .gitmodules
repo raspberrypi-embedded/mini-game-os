@@ -1,3 +1,6 @@
 [submodule "bcm2711"]
 	path = bcm2711
 	url = git@github.com:KuangjuX/bcm2711.git
+[submodule "bcm2837"]
+	path = bcm2837
+	url = git@github.com:raspberrypi-embedded/bcm2837.git

@@ -5,6 +5,9 @@ SDCARD 		:= /media/kuangjux/boot
 KERNEL_IMG 	:= kernel8.img
 CONFIG_FILE	:= config.txt
 
+QEMU 	     := qemu-system-aarch64 
+QEMU_OPTIONS := -M raspi3 -kernel kernel8.img -serial null -serial stdio
+
 BOARD ?= raspi4
 
 # Building mode argument
@@ -32,6 +35,9 @@ kernel:
 	@cargo build --features "board_$(BOARD)"
 	@cp $(ELF) kernel8.elf
 	@$(OBJCOPY) -O binary kernel8.elf kernel8.img
+
+qemu: kernel
+	$(QEMU) $(QEMU_OPTIONS)
 
 clean:
 	@cargo clean

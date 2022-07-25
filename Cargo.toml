@@ -9,6 +9,7 @@ edition = "2021"
 spin = "0.5"
 lazy_static = { version = "1.4.0", features = ["spin_no_std"] }
 allocator = { git = "https://github.com/Ko-oK-OS/allocator.git" }
+bcm2837 = { path = "bcm2837" }
 
 
 [features]
