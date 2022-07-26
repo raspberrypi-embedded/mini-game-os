@@ -2,6 +2,7 @@ use allocator::*;
 use core::alloc::{ GlobalAlloc, Layout };
 use core::cell::RefCell;
 use crate::println;
+use raspiberry_peripherals::PERIPHERAL_BASE;
 
 // Buddy System for memory allocate
 
@@ -55,18 +56,8 @@ impl KernelHeap {
             fn _end();
         }
         let end = _end as usize;
-        #[cfg(feature = "board_qemu")]
-        {
-            use bcm2837::addr::PERIPHERAL_BASE;
-            println!("KernelHeap: available memory: [{:#x}, {:#x})", end, PERIPHERAL_BASE);
-            unsafe{ self.init(end, PERIPHERAL_BASE) };
-        }
-        #[cfg(feature = "board_raspi4")] 
-        {
-            use bcm2711::addr::PERIPHERAL_BASE;
-            println!("KernelHeap: available memory: [{:#x}, {:#x})", end, PERIPHERAL_BASE);
-            unsafe{ self.init(end, PERIPHERAL_BASE) };
-        }
+        println!("KernelHeap: available memory: [{:#x}, {:#x})", end, PERIPHERAL_BASE);
+        unsafe{ self.init(end, PERIPHERAL_BASE) };
     }
 }
 

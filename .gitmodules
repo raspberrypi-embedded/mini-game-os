@@ -4,3 +4,6 @@
 [submodule "bcm2837"]
 	path = bcm2837
 	url = git@github.com:raspberrypi-embedded/bcm2837.git
+[submodule "raspiberry-peripherals"]
+	path = raspiberry-peripherals
+	url = git@github.com:raspberrypi-embedded/raspiberry-peripherals.git

@@ -23,20 +23,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f771a5d1f5503f7f4279a30f3643d3421ba149848b89ecaaec0ea2acf04a5ac4"
 
 [[package]]
-name = "bcm2711"
-version = "0.1.0"
-dependencies = [
- "bit_field",
-]
-
-[[package]]
-name = "bcm2837"
-version = "0.1.0"
-dependencies = [
- "bit_field",
-]
-
-[[package]]
 name = "bit_field"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -109,11 +95,17 @@ name = "raspi4-game"
 version = "0.1.0"
 dependencies = [
  "allocator",
- "bcm2711",
- "bcm2837",
  "embedded-graphics",
  "lazy_static",
+ "raspiberry-peripherals",
  "spin",
+]
+
+[[package]]
+name = "raspiberry-peripherals"
+version = "0.1.0"
+dependencies = [
+ "bit_field",
 ]
 
 [[package]]

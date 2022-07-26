@@ -5,15 +5,19 @@
 use core::{panic::PanicInfo, arch::global_asm};
 
 use crate::{snake::Snake, graphics::Graphics};
+use raspiberry_peripherals::mailboxes::MailBox;
+use board::driver::FrameBuffer;
 
 extern crate alloc;
 
 #[cfg(feature = "board_qemu")]
-#[path = "boards/qemu/mod.rs"]
+#[path = "boards/raspi/mod.rs"]
 mod board;
 #[cfg(not(any(feature = "board_qemu")))]
-#[path = "boards/raspi4/mod.rs"]
+#[path = "boards/raspi/mod.rs"]
 mod board;
+
+
 
 #[macro_use]
 mod mm;
@@ -41,32 +45,12 @@ extern "C" fn rust_main() {
 
     let mut graphics: Graphics = Graphics::uninit();
     let mut snake: snake::Snake;
-    #[cfg(feature = "board_qemu")]
-    {   
-        use bcm2837::mailboxes::MailBox;
-        use board::driver::FrameBuffer;
-        println!("Frame Buffer init......");
-        let mut mailbox = MailBox::new();
-        let mut frame_buffer = FrameBuffer::new(1920, 1024, &mut mailbox);
-        if let Ok((addr, pitch)) = frame_buffer.init() {
-            graphics = graphics::Graphics::new(addr, pitch, 1024, 768);
-
-            // graphics.draw_text("Hello World!", 100, 50);
-        }
-        
-    }   
-
-    #[cfg(feature = "board_raspi4")]
-    {   
-        use bcm2711::mailboxes::MailBox;
-        println!("Frame Buffer init......");
-        let mut mailbox = MailBox::new();
-        let mut frame_buffer = FrameBuffer::new(1024, 768, &mut mailbox);
-        if let Ok((addr, pitch)) = frame_buffer.init() {
-            graphics = graphics::Graphics::new(addr, pitch);
-            graphics.draw_pixel(100, 100, 1);
-        }    
-    }   
+    println!("Frame Buffer init......");
+    let mut mailbox = MailBox::new();
+    let mut frame_buffer = FrameBuffer::new(1920, 1024, &mut mailbox);
+    if let Ok((addr, pitch)) = frame_buffer.init() {
+        graphics = graphics::Graphics::new(addr, pitch, 1024, 768);
+    }
 
     snake = Snake::new(5, &mut graphics);
     snake.init();

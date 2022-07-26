@@ -9,13 +9,17 @@ edition = "2021"
 spin = "0.5"
 lazy_static = { version = "1.4.0", features = ["spin_no_std"] }
 allocator = { git = "https://github.com/Ko-oK-OS/allocator.git" }
-bcm2837 = { path = "bcm2837" }
 embedded-graphics  = "0.7.1" 
-
+raspiberry-peripherals = { path = "raspiberry-peripherals", optional = true}
+# raspiberry-peripherals = { path = "raspiberry-peripherals", features = ["raspi4"], optional = true}
 
 [features]
-board_qemu = []
-board_raspi4 = []
+board_qemu = [
+ "raspiberry-peripherals/raspi3"
+]
+board_raspi4 = [
+    "raspiberry-peripherals/raspi4"
+]
 
 
 [profile.dev]
@@ -24,5 +28,8 @@ panic = "abort"
 [profile.release]
 panic = "abort"
 
-[target.'cfg(target_arch = "aarch64")'.dependencies]
-bcm2711 = { path = "bcm2711"  }
+# [target.'cfg(feature = "board_qemu")'.dependencies]
+# raspiberry-peripherals = { path = "raspiberry-peripherals", feature = "raspi3" }
+
+# [target.'cfg(feature = "board_raspi4")'.dependencies]
+# raspiberry-peripherals = { path = "raspiberry-peripherals", feature = "raspi4" }
