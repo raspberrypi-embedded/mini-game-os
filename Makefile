@@ -63,6 +63,5 @@ debug: kernel
 		tmux split-window -h "$(GDB) -ex 'file $(KERNEL_FILE)' -ex 'set arch auto' -ex 'target remote localhost:1234'" && \
 		tmux -2 attach-session -d
 
-# 查看反汇编结果
 asm: kernel
 	@$(OBJDUMP) -d $(KERNEL_FILE) > $(KERNEL_ASM)

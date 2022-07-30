@@ -1,8 +1,10 @@
+use core::ops::Add;
 use core::ptr;
 use core::convert::TryInto;
 use embedded_graphics::geometry::{ OriginDimensions, Size };
 use embedded_graphics::draw_target::DrawTarget;
-use embedded_graphics::pixelcolor::{ Rgb888, Rgb565, raw::RawU16, raw::RawU32, raw::RawU24 };
+use embedded_graphics::mono_font::iso_8859_4::FONT_10X20;
+use embedded_graphics::pixelcolor::{ Rgb888, raw::RawU24 };
 use embedded_graphics::prelude::*;
 use embedded_graphics::primitives::*;
 use embedded_graphics::mono_font::ascii::*;
@@ -10,24 +12,6 @@ use embedded_graphics::mono_font::MonoTextStyle;
 use embedded_graphics::text::Text;
 
 
-const VGA: [u32; 16] = [
-    0x000000,
-    0x0000AA,
-    0x00AA00,
-    0x00AAAA,
-    0xAA0000,
-    0xAA00AA,
-    0xAA5500,
-    0xAAAAAA,
-    0x555555,
-    0x5555FF,
-    0x55FF55,
-    0x55FFFF,
-    0xFF5555,
-    0xFF55FF,
-    0xFFFF55,
-    0xFFFFFF
-];
 pub struct Graphics {
     width: u32,
     height: u32,
@@ -54,23 +38,50 @@ impl Graphics {
         }
     }   
 
+    pub fn width(&self) -> u32 {
+        self.width
+    }
+
+    pub fn height(&self) -> u32 {
+        self.height
+    }
+
     pub fn set_pixel(&self, x: u32, y: u32, color: u32) {
-        // let offset = y * self.pitch + x * 4;
         let offset = y * self.pitch / 4 + x;
         unsafe{
             ptr::write(
                 self.framebuffer.add(offset as usize), 
-                // VGA[(attr & 0xf) as usize]
                 color
             );
         }
     }
 
+    // pub fn clear(&mut self) {
+    //     for i in 0..self.height {
+    //         for j in 0..self.width {
+    //             unsafe{
+    //                 ptr::write(self.framebuffer.add((i * self.width + j) as usize), 0);
+    //             }
+    //         }
+    //     }
+    // }
 
     pub fn draw_line(&mut self, x1: i32, y1: i32, x2: i32, y2: i32) {
         // Red 1 pixel wide line from (50, 20) to (60, 35)
         Line::new(Point::new(x1, y1), Point::new(x2, y2))
         .into_styled(PrimitiveStyle::with_stroke(Rgb888::WHITE, 1))
+        .draw(self).unwrap();
+    }
+
+    pub fn draw_rectangle(&mut self, x: i32, y: i32, width: u32, height: u32, color: Rgb888) {
+        let style = PrimitiveStyleBuilder::new()
+        .stroke_color(color)
+        .stroke_width(3)
+        .fill_color(color)
+        .build();
+
+        Rectangle::new(Point::new(x, y), Size::new(width, height))
+        .into_styled(style)
         .draw(self).unwrap();
     }
 

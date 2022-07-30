@@ -24,6 +24,7 @@ mod mm;
 mod printf;
 mod graphics;
 mod snake;
+mod timer;
 
 global_asm!(include_str!("boot/boot.S"));
 
@@ -47,12 +48,13 @@ extern "C" fn rust_main() {
     let mut snake: snake::Snake;
     println!("Frame Buffer init......");
     let mut mailbox = MailBox::new();
-    let mut frame_buffer = FrameBuffer::new(1920, 1024, &mut mailbox);
+    let mut frame_buffer = FrameBuffer::new(1080, 1920, &mut mailbox);
     if let Ok((addr, pitch)) = frame_buffer.init() {
-        graphics = graphics::Graphics::new(addr, pitch, 1024, 768);
+        graphics = graphics::Graphics::new(addr, pitch,1080, 1920);
     }
 
-    snake = Snake::new(5, &mut graphics);
+    snake = Snake::new(10, &mut graphics);
     snake.init();
     snake.display();
+    snake.play();
 }

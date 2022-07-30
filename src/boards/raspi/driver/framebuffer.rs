@@ -82,7 +82,6 @@ impl<'a> FrameBuffer<'a> {
             let height = self.mail_box.read_buf(6);
             let pitch = self.mail_box.read_buf(33);
             let isrgb = self.mail_box.read_buf(24);
-            println!("[Debug] width: {}, height: {}, pitch: {}, isgrb: {}", width, height, pitch, isrgb);
             let fb_addr = self.mail_box.read_buf(28) as *mut u32;
             return Ok((fb_addr, pitch));
         }else{

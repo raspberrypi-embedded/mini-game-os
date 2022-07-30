@@ -10,12 +10,12 @@ spin = "0.5"
 lazy_static = { version = "1.4.0", features = ["spin_no_std"] }
 allocator = { git = "https://github.com/Ko-oK-OS/allocator.git" }
 embedded-graphics  = "0.7.1" 
-raspiberry-peripherals = { path = "raspiberry-peripherals", optional = true}
-# raspiberry-peripherals = { path = "raspiberry-peripherals", features = ["raspi4"], optional = true}
+raspiberry-peripherals = { path = "raspiberry-peripherals", default-features = false}
+rand = { version = "0.8.5", default-features = false, features = ["alloc", "small_rng"] }
 
 [features]
 board_qemu = [
- "raspiberry-peripherals/raspi3"
+    "raspiberry-peripherals/raspi3"
 ]
 board_raspi4 = [
     "raspiberry-peripherals/raspi4"
@@ -27,9 +27,3 @@ panic = "abort"
 
 [profile.release]
 panic = "abort"
-
-# [target.'cfg(feature = "board_qemu")'.dependencies]
-# raspiberry-peripherals = { path = "raspiberry-peripherals", feature = "raspi3" }
-
-# [target.'cfg(feature = "board_raspi4")'.dependencies]
-# raspiberry-peripherals = { path = "raspiberry-peripherals", feature = "raspi4" }

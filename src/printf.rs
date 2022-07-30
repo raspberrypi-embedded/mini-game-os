@@ -30,3 +30,24 @@ macro_rules! println {
         $crate::printf::_print(format_args!(concat!($fmt, "\n") $(,$($arg)+)?));
     }
 }
+
+#[macro_export]
+macro_rules! kdebug {
+    ($fmt:literal$(, $($arg: tt)+)?) => {
+        $crate::printf::_print(format_args!(concat!("[Debug]", $fmt, "\n") $(,$($arg)+)?));
+    }
+}
+
+#[macro_export]
+macro_rules! kwarn {
+    ($fmt:literal$(, $($arg: tt)+)?) => {
+        $crate::printf::_print(format_args!(concat!("[Warn]", $fmt, "\n") $(,$($arg)+)?));
+    }
+}
+
+#[macro_export]
+macro_rules! kerr {
+    ($fmt:literal$(, $($arg: tt)+)?) => {
+        $crate::printf::_print(format_args!(concat!("[Error]", $fmt, "\n") $(,$($arg)+)?));
+    }
+}

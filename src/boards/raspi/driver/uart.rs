@@ -96,6 +96,16 @@ impl Uart {
             else{ self.update_write_index(c) }
         }
     }
+
+    pub fn uart_read(&mut self) -> Option<char> {
+        self.update_fifo();
+
+        if self.readable() {
+            let c = self.read_byte();
+            return Some(c)
+        }
+        None
+    }
 }
 
 pub fn uart_init() {
@@ -108,6 +118,10 @@ pub fn uart_write_text(buf: &str) {
 
 pub fn uart_wait_read() {
     unsafe{ UART.non_block_wait_read() }
+}
+
+pub fn uart_read() -> Option<char> {
+    unsafe{ UART.uart_read() }
 }
 
 impl Write for Uart {
