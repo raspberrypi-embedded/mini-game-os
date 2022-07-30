@@ -9,6 +9,7 @@ use crate::timer::{get_counter, wait_msec};
 use alloc::format;
 use rand::{ SeedableRng, RngCore};
 use rand::rngs::SmallRng;
+use core::usize;
 
 #[derive(PartialEq)]
 pub enum Direction {
@@ -153,10 +154,12 @@ impl<'a> Snake<'a> {
         let tail = self.body.back().unwrap();
         let x = tail.x;
         let y = tail.y;
+        let mut index = usize::MAX;
         for i in 0..self.food.len() {
             let f = &self.food[i];
             if (x - f.x).abs() <= self.rec_width as i32 && (y - f.y).abs() <= self.rec_width as i32 {
-                self.food.remove(i);
+                // remove food block from board
+                index = i;
                 self.len += 1;
                 self.score += 1;
                 let head = self.body.front().unwrap();
@@ -178,6 +181,16 @@ impl<'a> Snake<'a> {
                 }
                 self.body.push_back(point);
             }
+        }
+        if !self.food.is_empty() && index < self.food.len() {
+            self.graphics.draw_rectangle(
+                self.food[index].x, 
+                self.food[index].y, 
+                self.rec_width, 
+                self.rec_width, 
+                Rgb888::BLACK
+            );
+            self.food.remove(index);
         }
     }
 
@@ -203,6 +216,8 @@ impl<'a> Snake<'a> {
         let mut rounds = 0;
         while self.state == GameState::Start {
             rounds += 1;
+            // check if eat food and update the state.
+            self.handle_eat();
             if self.check_fail() {
                 self.state = GameState::Fail;
                 kdebug!("Snake Game Over!");
@@ -259,8 +274,6 @@ impl<'a> Snake<'a> {
                 self.rec_width, 
                 Rgb888::BLACK
             );
-            // check if eat food and update the state.
-            self.handle_eat();
             self.display();
         }
     }

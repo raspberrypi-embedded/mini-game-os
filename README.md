@@ -1,6 +1,11 @@
 # Raspi4 Game
 
+## SnapShot
+### Serial Communication
 ![](image/serial.png)
+
+### Snake Game
+![](image/snake.png)
 
 ## Introduction
 
