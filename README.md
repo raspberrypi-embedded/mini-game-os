@@ -1,4 +1,10 @@
-# Raspi4 Game
+# mini-game-os
+
+## Introduction
+
+I will write a bare metal OS in the new raspberry pi 4 during learning for postgraduate exam. I hope to use most of peripherals in the raspberry pi.  
+  
+This project is a bare metal OS designed for just palying games. 
 
 ## SnapShot
 ### Serial Communication
@@ -7,9 +13,6 @@
 ### Snake Game
 ![](image/snake.png)
 
-## Introduction
-
-I will write a bare metal game in the new raspberry pi 4 during learning for postgraduate exam. I hope to use most of peripherals in the raspberry pi.
 
 ![](image/rasberrypi4.jpg)
 

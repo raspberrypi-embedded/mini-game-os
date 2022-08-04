@@ -1,5 +1,5 @@
 [package]
-name = "raspi4-game"
+name = "mini-game-os"
 version = "0.1.0"
 edition = "2021"
 

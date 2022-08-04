@@ -82,6 +82,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bc4010833aea396656c2f91ee704d51a6f1329ec2ab56ffd00bfd56f7481ea94"
 
 [[package]]
+name = "mini-game-os"
+version = "0.1.0"
+dependencies = [
+ "allocator",
+ "embedded-graphics",
+ "lazy_static",
+ "rand",
+ "raspiberry-peripherals",
+ "spin",
+]
+
+[[package]]
 name = "num-traits"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -104,18 +116,6 @@ name = "rand_core"
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d34f1408f55294453790c48b2f1ebbb1c5b4b7563eb1f418bcfcfdbb06ebb4e7"
-
-[[package]]
-name = "raspi4-game"
-version = "0.1.0"
-dependencies = [
- "allocator",
- "embedded-graphics",
- "lazy_static",
- "rand",
- "raspiberry-peripherals",
- "spin",
-]
 
 [[package]]
 name = "raspiberry-peripherals"
