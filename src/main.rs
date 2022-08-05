@@ -4,7 +4,8 @@
 
 use core::{panic::PanicInfo, arch::global_asm};
 
-use crate::{snake::Snake, graphics::Graphics};
+use crate::games::{snake::Snake};
+use crate::graphics::Graphics;
 use raspiberry_peripherals::mailboxes::MailBox;
 use board::driver::FrameBuffer;
 
@@ -23,8 +24,8 @@ mod board;
 mod mm;
 mod printf;
 mod graphics;
-mod snake;
 mod timer;
+mod games;
 
 global_asm!(include_str!("boot/boot.S"));
 
@@ -45,7 +46,7 @@ extern "C" fn rust_main() {
     mm::KERNEL_HEAP.mm_init();
 
     let mut graphics: Graphics = Graphics::uninit();
-    let mut snake: snake::Snake;
+    let mut snake: Snake;
     println!("Frame Buffer init......");
     let mut mailbox = MailBox::new();
     let mut frame_buffer = FrameBuffer::new(1080, 1920, &mut mailbox);

@@ -115,6 +115,7 @@ impl<'a> Snake<'a> {
     }
 
     fn display_board(&mut self) {
+        // draw snake in board
         for p in self.body.iter() {
             let x = p.x;
             let y = p.y;
@@ -194,9 +195,40 @@ impl<'a> Snake<'a> {
         }
     }
 
+    /// display the boundary of board
+    fn display_frame(&mut self) {
+        self.graphics.draw_line(
+            self.board.left as i32, 
+            self.board.top as i32, 
+            self.board.right as i32 , 
+            self.board.top as i32
+        );
+        self.graphics.draw_line(
+            self.board.left as i32, 
+            self.board.bottom as i32, 
+            self.board.right as i32 , 
+            self.board.bottom as i32
+        );
+
+        self.graphics.draw_line(
+            self.board.left as i32, 
+            self.board.top as i32, 
+            self.board.left as i32 , 
+            self.board.bottom as i32
+        );
+
+        self.graphics.draw_line(
+            self.board.right as i32, 
+            self.board.top as i32, 
+            self.board.right as i32 , 
+            self.board.bottom as i32
+        );
+    }
+
     pub fn display(&mut self) {
         self.display_head();
         self.display_board();
+        self.display_frame();
     }
 
     pub fn check_fail(&mut self) -> bool {
