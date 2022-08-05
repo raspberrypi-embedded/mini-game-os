@@ -61,7 +61,8 @@ pub struct Snake<'a> {
     direction: Direction,
     state: GameState,
     board: GameBoard,
-    food: VecDeque<Point>
+    food: VecDeque<Point>,
+    speed: usize
 }
 
 impl<'a> Snake<'a> {
@@ -84,7 +85,8 @@ impl<'a> Snake<'a> {
                 left,
                 right
             ),
-            food: VecDeque::new()
+            food: VecDeque::new(),
+            speed: 0
         }
     }
 
@@ -163,21 +165,22 @@ impl<'a> Snake<'a> {
                 index = i;
                 self.len += 1;
                 self.score += 1;
-                let head = self.body.front().unwrap();
+                // let head = self.body.front().unwrap();
+                let head = self.body.back().unwrap();
                 let mut point = Point::new(0, 0);
                 kdebug!("x: {}, y: {}", x, y);
                 match self.direction {
                     Direction::Left => {
-                        point = Point::new(head.x + self.rec_width as i32, head.y);
-                    }
-                    Direction::Right => {
                         point = Point::new(head.x - self.rec_width as i32, head.y);
                     }
+                    Direction::Right => {
+                        point = Point::new(head.x + self.rec_width as i32, head.y);
+                    }
                     Direction::Down => {
-                        point = Point::new(head.x, head.y - self.rec_width as i32);
+                        point = Point::new(head.x, head.y + self.rec_width as i32);
                     }
                     Direction::Up => {
-                        point = Point::new(head.x, head.y + self.rec_width as i32);
+                        point = Point::new(head.x, head.y - self.rec_width as i32);
                     }
                 }
                 self.body.push_back(point);
@@ -192,43 +195,48 @@ impl<'a> Snake<'a> {
                 Rgb888::BLACK
             );
             self.food.remove(index);
+            self.speed *= 2;
         }
     }
 
     /// display the boundary of board
-    fn display_frame(&mut self) {
+    pub fn display_frame(&mut self) {
         self.graphics.draw_line(
             self.board.left as i32, 
             self.board.top as i32, 
             self.board.right as i32 , 
-            self.board.top as i32
+            self.board.top as i32,
+            10,
+            
         );
         self.graphics.draw_line(
             self.board.left as i32, 
             self.board.bottom as i32, 
             self.board.right as i32 , 
-            self.board.bottom as i32
+            self.board.bottom as i32,
+            10
         );
 
         self.graphics.draw_line(
             self.board.left as i32, 
             self.board.top as i32, 
             self.board.left as i32 , 
-            self.board.bottom as i32
+            self.board.bottom as i32,
+            10
         );
 
         self.graphics.draw_line(
             self.board.right as i32, 
             self.board.top as i32, 
             self.board.right as i32 , 
-            self.board.bottom as i32
+            self.board.bottom as i32,
+            10
         );
     }
 
     pub fn display(&mut self) {
         self.display_head();
         self.display_board();
-        self.display_frame();
     }
 
     pub fn check_fail(&mut self) -> bool {
@@ -244,6 +252,7 @@ impl<'a> Snake<'a> {
     }
 
     pub fn play(&mut self) {
+        self.display_frame();
         self.state = GameState::Start;
         let mut rounds = 0;
         while self.state == GameState::Start {
@@ -292,7 +301,13 @@ impl<'a> Snake<'a> {
                     self.body.push_back(point);
                 }
             }
-            wait_msec(100);
+
+            let sec:usize = if 100 - self.speed < 10 {
+                10
+            } else {
+                100 - self.speed
+            };
+            wait_msec(sec);
             let head = self.body.pop_front().unwrap();
             // Generate food in board each 5 rounds
             if rounds % 20 == 0 {

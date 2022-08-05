@@ -1,6 +1,6 @@
 TARGRT 		:= aarch64-unknown-none
 MODE   		:= debug
-ELF	   		:= target/$(TARGRT)/$(MODE)/raspi4-game
+ELF	   		:= target/$(TARGRT)/$(MODE)/mini-game-os
 SDCARD 		:= /media/kuangjux/boot
 KERNEL_FILE := kernel8.elf
 KERNEL_IMG 	:= kernel8.img

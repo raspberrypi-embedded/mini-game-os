@@ -1,4 +1,3 @@
-use core::ops::Add;
 use core::ptr;
 use core::convert::TryInto;
 use embedded_graphics::geometry::{ OriginDimensions, Size };
@@ -7,7 +6,6 @@ use embedded_graphics::mono_font::iso_8859_4::FONT_10X20;
 use embedded_graphics::pixelcolor::{ Rgb888, raw::RawU24 };
 use embedded_graphics::prelude::*;
 use embedded_graphics::primitives::*;
-use embedded_graphics::mono_font::ascii::*;
 use embedded_graphics::mono_font::MonoTextStyle;
 use embedded_graphics::text::Text;
 
@@ -56,27 +54,17 @@ impl Graphics {
         }
     }
 
-    // pub fn clear(&mut self) {
-    //     for i in 0..self.height {
-    //         for j in 0..self.width {
-    //             unsafe{
-    //                 ptr::write(self.framebuffer.add((i * self.width + j) as usize), 0);
-    //             }
-    //         }
-    //     }
-    // }
 
-    pub fn draw_line(&mut self, x1: i32, y1: i32, x2: i32, y2: i32) {
-        // Red 1 pixel wide line from (50, 20) to (60, 35)
+    pub fn draw_line(&mut self, x1: i32, y1: i32, x2: i32, y2: i32, width: u32) {
         Line::new(Point::new(x1, y1), Point::new(x2, y2))
-        .into_styled(PrimitiveStyle::with_stroke(Rgb888::WHITE, 1))
+        .into_styled(PrimitiveStyle::with_stroke(Rgb888::WHITE, width))
         .draw(self).unwrap();
     }
 
     pub fn draw_rectangle(&mut self, x: i32, y: i32, width: u32, height: u32, color: Rgb888) {
         let style = PrimitiveStyleBuilder::new()
         .stroke_color(color)
-        .stroke_width(3)
+        .stroke_width(width)
         .fill_color(color)
         .build();
 
